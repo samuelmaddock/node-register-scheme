@@ -35,9 +35,9 @@ bool RegisterW(const wchar_t* scheme, const wchar_t* command) {
   }
 
   wchar_t protocolName[64];
-  StringCbPrintfW(protocolName, sizeof(protocolName), L"%s", scheme);
+  StringCbPrintfW(protocolName, sizeof(protocolName), L"discord-%s", scheme);
   wchar_t protocolDescription[128];
-  StringCbPrintfW(protocolDescription, sizeof(protocolDescription), L"URL:Run %s protocol", scheme);
+  StringCbPrintfW(protocolDescription, sizeof(protocolDescription), L"URL:Run game %s protocol", scheme);
   wchar_t urlProtocol = 0;
 
   wchar_t keyName[256];

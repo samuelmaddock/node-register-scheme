@@ -7,7 +7,7 @@
 
 static bool RegisterURL(const char* scheme) {
   char url[256];
-  snprintf(url, sizeof(url), "%s", scheme);
+  snprintf(url, sizeof(url), "discord-%s", scheme);
   CFStringRef cfURL = CFStringCreateWithCString(NULL, url, kCFStringEncodingUTF8);
 
   NSString* myBundleId = [[NSBundle mainBundle] bundleIdentifier];

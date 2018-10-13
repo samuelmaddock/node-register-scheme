@@ -1,16 +1,32 @@
-#include <napi.h>
+#include <nan.h>
 #include "register.h"
 
-Napi::Value RPH(const Napi::CallbackInfo& info) {
-  const char* scheme = info[0].As<Napi::String>().Utf8Value().c_str();
-  const char* command = info[0].As<Napi::String>().Utf8Value().c_str();
+#define THROW_BAD_ARGS(msg)    \
+    do {                       \
+       Nan::ThrowTypeError(msg); \
+       return;                   \
+    } while (0);
 
-  return Napi::Boolean::New(info.Env(), Register(scheme, command));
+NAN_METHOD(RPH) {
+  Nan::HandleScope scope;
+  if (info.Length() < 2 || !info[0]->IsString() || !info[1]->IsString()) {
+    THROW_BAD_ARGS("Bad arguments");
+  }
+
+  std::string scheme_str(*(v8::String::Utf8Value(info[0])));
+  std::string command_str(*(v8::String::Utf8Value(info[1])));
+
+  const char* scheme = scheme_str.c_str();
+  const char* command = command_str.c_str();
+
+  bool success = Register(scheme, command);
+  info.GetReturnValue().Set(Nan::New(success));
 }
 
-Napi::Object Init(Napi::Env env, Napi::Object exports) {
-  exports["registerProtocolHandler"] = Napi::Function::New(env, RPH);
-  return exports;
+NAN_MODULE_INIT(Init) {
+  Nan::Set(target,
+           Nan::New("registerProtocolHandler").ToLocalChecked(),
+           Nan::New<v8::FunctionTemplate>(RPH)->GetFunction());
 }
 
-NODE_API_MODULE(addon, Init)
+NODE_MODULE(rph, Init)
