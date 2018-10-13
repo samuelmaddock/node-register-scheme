@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install": "node-gyp rebuild",
+    "install": "echo \"Skipping build of node-register-scheme\"",
     "build": "node-gyp build"
   },
   "repository": {
